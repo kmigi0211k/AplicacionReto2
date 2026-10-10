@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.reto2.ui.home.HomeScreen
+import com.example.reto2.ui.home.HomeViewModel
 import com.example.reto2.ui.login.LoginScreen
 import com.example.reto2.ui.login.LoginViewModel
 
@@ -18,7 +19,9 @@ object AppRoutes {
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
+
     val loginViewModel: LoginViewModel = viewModel()
+    val homeViewModel: HomeViewModel = viewModel()
 
     NavHost(
         navController = navController,
@@ -42,15 +45,16 @@ fun AppNavigation() {
             HomeScreen(
                 onLogout = {
                     loginViewModel.logout()
+
                     navController.navigate(AppRoutes.LOGIN) {
                         popUpTo(AppRoutes.HOME) {
                             inclusive = true
                         }
+                        launchSingleTop = true
                     }
-                }
+                },
+                homeViewModel = homeViewModel
             )
         }
     }
 }
-
-
