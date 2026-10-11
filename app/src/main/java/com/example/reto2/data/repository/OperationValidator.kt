@@ -1,6 +1,6 @@
-
 package com.example.reto2.data.repository
 
+import java.util.Locale
 import kotlin.math.abs
 
 object OperationValidator {
@@ -16,7 +16,7 @@ object OperationValidator {
         if (!amount.isFinite() || amount <= 0.0) {
             return Result.failure(
                 IllegalArgumentException(
-                    "La cantidad debe ser mayor que cero."
+                    "La cantidad debe ser un número válido mayor que cero."
                 )
             )
         }
@@ -37,24 +37,36 @@ object OperationValidator {
             )
         }
 
-        val deviation = (
-                abs(appliedRate - referenceRate) /
-                        referenceRate
-                ) * 100.0
+        val deviation =
+            abs(appliedRate - referenceRate) /
+                    referenceRate * 100.0
+
+        if (!deviation.isFinite()) {
+            return Result.failure(
+                IllegalArgumentException(
+                    "No fue posible calcular la desviación de la tasa."
+                )
+            )
+        }
 
         if (deviation > MAX_DEVIATION_PERCENT) {
+            val deviationFormatted = String.format(
+                Locale.US,
+                "%.2f",
+                deviation
+            )
+
             return Result.failure(
                 IllegalArgumentException(
                     "Operación rechazada: la desviación es " +
-                            "%.2f%% y supera el límite del 2,5%%."
-                                .format(deviation)
+                            "$deviationFormatted% y supera el límite del 2,5%."
                 )
             )
         }
 
         val total = amount * appliedRate
 
-        if (!total.isFinite()) {
+        if (!total.isFinite() || total <= 0.0) {
             return Result.failure(
                 IllegalArgumentException(
                     "El importe calculado no es válido."
@@ -64,4 +76,5 @@ object OperationValidator {
 
         return Result.success(total)
     }
+
 }

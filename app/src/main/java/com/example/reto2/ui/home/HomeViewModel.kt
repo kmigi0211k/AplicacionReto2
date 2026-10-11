@@ -1,4 +1,3 @@
-
 package com.example.reto2.ui.home
 
 import androidx.compose.runtime.mutableStateOf
@@ -75,4 +74,5 @@ class HomeViewModel : ViewModel() {
             )
         }
     }
+
 }

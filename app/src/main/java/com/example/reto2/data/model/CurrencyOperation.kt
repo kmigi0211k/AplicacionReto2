@@ -11,8 +11,7 @@ data class CurrencyOperation(
     val referenceRate: Double = 0.0,
     val appliedRate: Double = 0.0,
     val total: Double = 0.0,
-    val status: String = "PENDING",
-    val createdAt: Long = 0L
+    val status: String = "PENDING_AUDIT",
+    val createdAt: Long = 0L,
+    val approvedAt: Long = 0L
 )
-
-

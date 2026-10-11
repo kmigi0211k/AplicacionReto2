@@ -1,10 +1,10 @@
+
 package com.example.reto2.data.remote
 
 import com.example.reto2.BuildConfig
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-@Suppress("unused")
 object FinnhubClient {
 
     private const val BASE_URL = "https://finnhub.io/api/v1/"

@@ -36,4 +36,3 @@ object FrankfurterClient {
         retrofit.create(FrankfurterApi::class.java)
     }
 }
-

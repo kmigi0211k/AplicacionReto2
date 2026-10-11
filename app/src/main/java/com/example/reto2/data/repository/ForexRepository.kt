@@ -1,4 +1,3 @@
-
 package com.example.reto2.data.repository
 
 import com.example.reto2.data.remote.FinnhubClient
@@ -12,15 +11,41 @@ class ForexRepository {
         base: String = "USD"
     ): Result<FinnhubForexRatesResponse> {
         return try {
-            val rates = FrankfurterClient.api.getRates(base)
+            val normalizedBase = base.trim().uppercase()
+
+            if (normalizedBase.isBlank()) {
+                return Result.failure(
+                    IllegalArgumentException(
+                        "Debes especificar una moneda base."
+                    )
+                )
+            }
+
+            val rates = FrankfurterClient.api.getRates(normalizedBase)
 
             val quotes = rates.associate { rate ->
                 rate.quote to rate.rate
             }
 
+            if (quotes.isEmpty()) {
+                return Result.failure(
+                    IllegalStateException(
+                        "El servicio no devolvió tasas de cambio."
+                    )
+                )
+            }
+
+            if (quotes.values.any { !it.isFinite() || it <= 0.0 }) {
+                return Result.failure(
+                    IllegalStateException(
+                        "El servicio devolvió una tasa de cambio no válida."
+                    )
+                )
+            }
+
             Result.success(
                 FinnhubForexRatesResponse(
-                    base = base,
+                    base = normalizedBase,
                     quote = quotes
                 )
             )
