@@ -35,6 +35,14 @@ En esta sección se muestran las principales pantallas de la aplicación. Para a
 
 <img width="1917" height="967" alt="image" src="https://github.com/user-attachments/assets/e08273b4-fb99-43ff-a0cb-15070d93743c" />
 
+### 7. Operación Rechazada de divisa
+<img width="1911" height="1017" alt="image" src="https://github.com/user-attachments/assets/6ae68a12-7946-42b3-9495-bd66335ef90a" />
+
+### 8. Auditoria pendiente de administrador 
+<img width="1917" height="1020" alt="image" src="https://github.com/user-attachments/assets/6588fe4e-7987-401c-b815-d784fac41dc1" />
+
+
+
 
 
 
