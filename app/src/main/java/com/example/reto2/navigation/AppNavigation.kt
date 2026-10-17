@@ -20,6 +20,8 @@ object AppRoutes {
     const val HOME = "home"
     const val ADMIN = "admin"
     const val PROFILE = "profile"
+
+    const val CAMERA = "camera"
 }
 
 @Composable
@@ -68,6 +70,11 @@ fun AppNavigation() {
                         launchSingleTop = true
                     }
                 },
+                onOpenCamera = {
+                    navController.navigate(AppRoutes.CAMERA) {
+                        launchSingleTop = true
+                    }
+                },
                 homeViewModel = homeViewModel
             )
         }
@@ -85,7 +92,9 @@ fun AppNavigation() {
                 }
             )
         }
-
+        composable(AppRoutes.CAMERA) {
+            CamaraScreen(onBack = { navController.popBackStack() })
+        }
         composable(AppRoutes.PROFILE) {
             ProfileScreen(
                 onBack = {

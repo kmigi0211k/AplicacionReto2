@@ -47,6 +47,7 @@ private val currencies = listOf(
 fun HomeScreen(
     onLogout: () -> Unit,
     onOpenProfile: () -> Unit,
+    onOpenCamera: () -> Unit,
     modifier: Modifier = Modifier,
     homeViewModel: HomeViewModel = viewModel(),
     operationViewModel: OperationViewModel = viewModel()
@@ -144,6 +145,10 @@ fun HomeScreen(
                 enabled = !state.isLoading
             ) {
                 Text("Actualizar tasas")
+            }
+
+            Button(onClick = onOpenCamera) {
+                Text("Abrir cámara")
             }
 
             Spacer(modifier = Modifier.height(8.dp))
