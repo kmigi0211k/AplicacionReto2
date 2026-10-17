@@ -1,3 +1,4 @@
+
 package com.example.reto2.ui.home
 
 import androidx.compose.foundation.layout.Arrangement
@@ -9,19 +10,20 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -42,6 +44,8 @@ private val currencies = listOf(
     "CAD", "CHF", "AUD", "MXN", "BRL"
 )
 
+
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
@@ -61,6 +65,14 @@ fun HomeScreen(
     var targetCurrency by remember { mutableStateOf("COP") }
     var amountText by remember { mutableStateOf("1") }
     var appliedRateText by remember { mutableStateOf("") }
+
+    var voiceConfirmation by remember {
+        mutableStateOf<VoiceCommand?>(null)
+    }
+
+    var voiceError by remember {
+        mutableStateOf<String?>(null)
+    }
 
     val baseRate = state.rates[baseCurrency] ?: 1.0
     val targetRate = state.rates[targetCurrency] ?: 0.0
@@ -95,14 +107,11 @@ fun HomeScreen(
         modifier = modifier.fillMaxSize(),
         topBar = {
             TopAppBar(
-                title = {
-                    Text("Inicio - Divisas")
-                },
+                title = { Text("Inicio - Divisas") },
                 actions = {
                     Button(onClick = onOpenProfile) {
                         Text("Mi perfil")
                     }
-
                     Button(onClick = onLogout) {
                         Text("Cerrar sesión")
                     }
@@ -110,7 +119,6 @@ fun HomeScreen(
             )
         }
     ) { innerPadding ->
-
         Column(
             modifier = Modifier
                 .padding(innerPadding)
@@ -119,7 +127,6 @@ fun HomeScreen(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-
             Text(
                 text = "Tasas de cambio",
                 style = MaterialTheme.typography.titleLarge
@@ -136,9 +143,7 @@ fun HomeScreen(
                 )
             }
 
-            Text(
-                text = "Monedas disponibles: ${state.rates.size}"
-            )
+            Text("Monedas disponibles: ${state.rates.size}")
 
             Button(
                 onClick = { homeViewModel.loadRates() },
@@ -151,8 +156,32 @@ fun HomeScreen(
                 Text("Abrir cámara")
             }
 
+            // ASISTENTE DE VOZ
+            Text(
+                text = "Asistente de voz",
+                style = MaterialTheme.typography.titleLarge
+            )
+
+            Text(
+                text = "Prueba diciendo: \"Quiero comprar 100 dólares\"."
+            )
+
+            VoiceAssistantButton { phrase ->
+                val command = parseVoiceCommand(phrase)
+
+                if (command != null) {
+                    voiceConfirmation = command
+                    voiceError = null
+                } else {
+                    voiceError =
+                        "No entendí la orden reconocida: \"$phrase\". " +
+                                "Prueba: \"Quiero comprar 100 dólares\"."
+                }
+            }
+
             Spacer(modifier = Modifier.height(8.dp))
 
+            // FORMULARIO DE OPERACIONES
             Text(
                 text = "Registrar operación",
                 style = MaterialTheme.typography.titleLarge
@@ -190,17 +219,13 @@ fun HomeScreen(
             CurrencyDropdown(
                 label = "Moneda de origen",
                 selectedCurrency = baseCurrency,
-                onCurrencySelected = {
-                    baseCurrency = it
-                }
+                onCurrencySelected = { baseCurrency = it }
             )
 
             CurrencyDropdown(
                 label = "Moneda de destino",
                 selectedCurrency = targetCurrency,
-                onCurrencySelected = {
-                    targetCurrency = it
-                }
+                onCurrencySelected = { targetCurrency = it }
             )
 
             OutlinedTextField(
@@ -285,6 +310,7 @@ fun HomeScreen(
 
             Spacer(modifier = Modifier.height(12.dp))
 
+            // FINNHUB
             Text(
                 text = "Símbolos de Finnhub",
                 style = MaterialTheme.typography.titleLarge
@@ -307,9 +333,7 @@ fun HomeScreen(
                 CircularProgressIndicator()
             }
 
-            Text(
-                text = "Símbolos encontrados: ${state.symbolsCount ?: 0}"
-            )
+            Text("Símbolos encontrados: ${state.symbolsCount ?: 0}")
 
             state.symbolsError?.let { error ->
                 Text(
@@ -320,8 +344,7 @@ fun HomeScreen(
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // HISTORIAL DE OPERACIONES
-
+            // HISTORIAL
             Text(
                 text = "Mi historial de operaciones",
                 style = MaterialTheme.typography.titleLarge
@@ -332,9 +355,7 @@ fun HomeScreen(
             )
 
             Button(
-                onClick = {
-                    operationViewModel.loadMyOperations()
-                },
+                onClick = { operationViewModel.loadMyOperations() },
                 modifier = Modifier.fillMaxWidth(),
                 enabled = !historyState.isLoading
             ) {
@@ -373,6 +394,78 @@ fun HomeScreen(
             Spacer(modifier = Modifier.height(20.dp))
         }
     }
+
+    // CONFIRMAR ORDEN RECONOCIDA
+    voiceConfirmation?.let { command ->
+        AlertDialog(
+            onDismissRequest = {
+                voiceConfirmation = null
+            },
+            title = {
+                Text("Confirmar orden de voz")
+            },
+            text = {
+                Text(
+                    "Operación: ${
+                        if (command.operationType == "BUY") {
+                            "Comprar"
+                        } else {
+                            "Vender"
+                        }
+                    }\n" +
+                            "Cantidad: ${command.amount} ${command.baseCurrency}\n" +
+                            "Moneda de destino: ${command.targetCurrency}\n\n" +
+                            "¿Quieres completar el formulario con estos datos?"
+                )
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        operationType = command.operationType
+                        baseCurrency = command.baseCurrency
+                        targetCurrency = command.targetCurrency
+                        amountText = command.amount.toString()
+                        voiceConfirmation = null
+                    }
+                ) {
+                    Text("Completar formulario")
+                }
+            },
+            dismissButton = {
+                Button(
+                    onClick = {
+                        voiceConfirmation = null
+                    }
+                ) {
+                    Text("Cancelar")
+                }
+            }
+        )
+    }
+
+    // ERROR DE RECONOCIMIENTO
+    voiceError?.let { error ->
+        AlertDialog(
+            onDismissRequest = {
+                voiceError = null
+            },
+            title = {
+                Text("No se reconoció la orden")
+            },
+            text = {
+                Text(error)
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        voiceError = null
+                    }
+                ) {
+                    Text("Aceptar")
+                }
+            }
+        )
+    }
 }
 
 @Composable
@@ -396,46 +489,55 @@ private fun OperationHistoryCard(
             )
 
             Text(
-                text = "Monedas: ${operation.baseCurrency} → ${operation.targetCurrency}"
+                "Monedas: ${operation.baseCurrency} → ${operation.targetCurrency}"
             )
 
             Text(
-                text = "Cantidad: ${
-                    String.format(Locale.US, "%.2f", operation.amount)
+                "Cantidad: ${
+                    String.format(
+                        Locale.US,
+                        "%.2f",
+                        operation.amount
+                    )
                 } ${operation.baseCurrency}"
             )
 
             Text(
-                text = "Tasa de referencia: ${
-                    String.format(Locale.US, "%.6f", operation.referenceRate)
+                "Tasa de referencia: ${
+                    String.format(
+                        Locale.US,
+                        "%.6f",
+                        operation.referenceRate
+                    )
                 }"
             )
 
             Text(
-                text = "Tasa aplicada: ${
-                    String.format(Locale.US, "%.6f", operation.appliedRate)
+                "Tasa aplicada: ${
+                    String.format(
+                        Locale.US,
+                        "%.6f",
+                        operation.appliedRate
+                    )
                 }"
             )
 
             Text(
-                text = "Total: ${
-                    String.format(Locale.US, "%.2f", operation.total)
+                "Total: ${
+                    String.format(
+                        Locale.US,
+                        "%.2f",
+                        operation.total
+                    )
                 } ${operation.targetCurrency}"
             )
 
             Text(
                 text = when (operation.status) {
-                    "PENDING_AUDIT" ->
-                        "Estado: Pendiente de auditoría"
-
-                    "APPROVED" ->
-                        "Estado: Aprobada"
-
-                    "REJECTED" ->
-                        "Estado: Rechazada"
-
-                    else ->
-                        "Estado: ${operation.status}"
+                    "PENDING_AUDIT" -> "Estado: Pendiente de auditoría"
+                    "APPROVED" -> "Estado: Aprobada"
+                    "REJECTED" -> "Estado: Rechazada"
+                    else -> "Estado: ${operation.status}"
                 }
             )
 
@@ -479,9 +581,7 @@ private fun CurrencyDropdown(
         ) {
             currencies.forEach { currency ->
                 DropdownMenuItem(
-                    text = {
-                        Text(currency)
-                    },
+                    text = { Text(currency) },
                     onClick = {
                         onCurrencySelected(currency)
                         expanded = false

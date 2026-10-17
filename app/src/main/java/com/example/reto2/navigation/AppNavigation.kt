@@ -20,13 +20,13 @@ object AppRoutes {
     const val HOME = "home"
     const val ADMIN = "admin"
     const val PROFILE = "profile"
-
     const val CAMERA = "camera"
 }
 
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
+
     val loginViewModel: LoginViewModel = viewModel()
     val homeViewModel: HomeViewModel = viewModel()
 
@@ -37,21 +37,24 @@ fun AppNavigation() {
         startDestination = AppRoutes.LOGIN
     ) {
         composable(AppRoutes.LOGIN) {
-            LoginScreen(viewModel = loginViewModel) {
-                val destination =
-                    if (authState.user?.role == "admin") {
-                        AppRoutes.ADMIN
-                    } else {
-                        AppRoutes.HOME
-                    }
+            LoginScreen(
+                viewModel = loginViewModel,
+                onLoginSuccess = {
+                    val destination =
+                        if (authState.user?.role == "admin") {
+                            AppRoutes.ADMIN
+                        } else {
+                            AppRoutes.HOME
+                        }
 
-                navController.navigate(destination) {
-                    popUpTo(AppRoutes.LOGIN) {
-                        inclusive = true
+                    navController.navigate(destination) {
+                        popUpTo(AppRoutes.LOGIN) {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
                     }
-                    launchSingleTop = true
                 }
-            }
+            )
         }
 
         composable(AppRoutes.HOME) {
@@ -92,9 +95,15 @@ fun AppNavigation() {
                 }
             )
         }
+
         composable(AppRoutes.CAMERA) {
-            CamaraScreen(onBack = { navController.popBackStack() })
+            CamaraScreen(
+                onBack = {
+                    navController.popBackStack()
+                }
+            )
         }
+
         composable(AppRoutes.PROFILE) {
             ProfileScreen(
                 onBack = {
