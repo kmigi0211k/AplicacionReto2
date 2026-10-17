@@ -204,8 +204,31 @@ Los resultados deben comprobarse después de ejecutar cada comando.
 - Continuar mejorando la seguridad y las reglas de acceso a los datos.
 
 
+
 ## 👨‍💻 Autor
 
 **Juan Camilo Giraldo Lizcano**
 
 Repositorio: [AplicacionReto2 en GitHub](https://github.com/kmigi0211k/AplicacionReto2)
+
+Integración de cámara y asistente por voz
+1. Integración de la cámara
+Se implementó la funcionalidad de cámara en la aplicación Android, permitiendo al usuario abrir la cámara del dispositivo y capturar fotografías desde la aplicación.
+Características:
+- Acceso a la cámara del dispositivo.
+- Captura de fotografías.
+- Integración con la navegación de la aplicación para regresar a la pantalla anterior.
+2. Asistente por voz
+Se implementó un asistente por voz que permite ingresar información mediante comandos de voz, facilitando el registro de operaciones de compra y venta de divisas.
+Características:
+- Reconocimiento de comandos de voz.
+- Identificación del tipo de operación: compra o venta.
+- Reconocimiento de montos y monedas mencionadas.
+- Autocompletado de información en el formulario de la operación.
+Tecnologías utilizadas
+- Kotlin
+- Android Studio
+- Jetpack Compose
+- Reconocimiento de voz de Android
+Objetivo
+Facilitar la interacción del usuario con la aplicación mediante la captura de fotografías y el ingreso de información utilizando comandos de vo
