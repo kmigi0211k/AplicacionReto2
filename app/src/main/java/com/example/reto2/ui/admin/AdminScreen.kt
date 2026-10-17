@@ -19,7 +19,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.example.reto2.data.media.CloudinaryService
+import com.example.reto2.ui.media.CloudinaryService
 import com.example.reto2.data.model.CurrencyOperation
 import com.example.reto2.data.repository.OperationRepository
 import com.google.firebase.auth.FirebaseAuth

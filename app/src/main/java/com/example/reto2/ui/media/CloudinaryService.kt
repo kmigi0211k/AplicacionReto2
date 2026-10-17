@@ -1,5 +1,5 @@
 
-package com.example.reto2.data.media
+package com.example.reto2.ui.media
 
 import android.content.Context
 import android.net.Uri
@@ -11,7 +11,6 @@ import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.asRequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 import java.io.File
 import java.io.IOException
@@ -22,7 +21,7 @@ object CloudinaryService {
 
     suspend fun uploadImage(
         context: Context,
-        imageUri: Uri
+        imageUri: Uri,
     ): Result<String> = withContext(Dispatchers.IO) {
         try {
             val cloudName = BuildConfig.CLOUDINARY_CLOUD_NAME

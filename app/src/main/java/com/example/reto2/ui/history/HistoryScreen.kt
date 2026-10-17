@@ -201,7 +201,7 @@ private fun formatOperationDate(
 
     val formatter = SimpleDateFormat(
         "dd/MM/yyyy HH:mm:ss",
-        Locale("es", "CO")
+        Locale.forLanguageTag("es-CO")
     )
 
     formatter.timeZone = TimeZone.getTimeZone("America/Bogota")

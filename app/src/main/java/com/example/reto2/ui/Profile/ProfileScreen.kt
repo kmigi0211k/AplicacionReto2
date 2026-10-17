@@ -35,7 +35,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.example.reto2.data.media.CloudinaryService
+import com.example.reto2.ui.media.CloudinaryService
 import com.example.reto2.ui.media.MediaPicker
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -99,8 +99,8 @@ fun ProfileScreen(
                                 ?: "Correo no disponible"
 
                     // Acepta ambos nombres: role y rol.
-                    val roleValue = document.get("role")
-                        ?: document.get("rol")
+                    val roleValue = document["role"]
+                        ?: document["rol"]
 
                     role = when (roleValue) {
                         is String -> roleValue
