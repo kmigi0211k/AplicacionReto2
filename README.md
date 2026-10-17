@@ -210,25 +210,59 @@ Los resultados deben comprobarse después de ejecutar cada comando.
 **Juan Camilo Giraldo Lizcano**
 
 Repositorio: [AplicacionReto2 en GitHub](https://github.com/kmigi0211k/AplicacionReto2)
+# 📱 Integración de Cámara y Asistente por Voz
 
-Integración de cámara y asistente por voz
-1. Integración de la cámara
-Se implementó la funcionalidad de cámara en la aplicación Android, permitiendo al usuario abrir la cámara del dispositivo y capturar fotografías desde la aplicación.
-Características:
-- Acceso a la cámara del dispositivo.
+<p align="center">
+  <strong>Mejorando la interacción del usuario en una aplicación Android</strong>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Kotlin-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white" alt="Kotlin">
+  <img src="https://img.shields.io/badge/Android_Studio-3DDC84?style=for-the-badge&logo=androidstudio&logoColor=white" alt="Android Studio">
+  <img src="https://img.shields.io/badge/Jetpack_Compose-4285F4?style=for-the-badge&logo=jetpackcompose&logoColor=white" alt="Jetpack Compose">
+</p>
+
+## 📌 Descripción
+
+Este desarrollo incorpora dos funcionalidades a la aplicación móvil: la captura de fotografías mediante la cámara del dispositivo y el ingreso de información a través de comandos de voz.
+
+El objetivo es ofrecer una interacción más sencilla y práctica durante el uso de la aplicación.
+
+## 📸 1. Integración de cámara
+
+Se implementó el acceso a la cámara del dispositivo para capturar fotografías desde la aplicación.
+
+**Funcionalidades principales:**
+- Apertura de la cámara.
 - Captura de fotografías.
-- Integración con la navegación de la aplicación para regresar a la pantalla anterior.
-2. Asistente por voz
-Se implementó un asistente por voz que permite ingresar información mediante comandos de voz, facilitando el registro de operaciones de compra y venta de divisas.
-Características:
+- Retorno a la pantalla anterior mediante la navegación de la aplicación.
+
+## 🎙️ 2. Asistente por voz
+
+Se desarrolló un asistente que reconoce instrucciones habladas y facilita el ingreso de datos en las operaciones de compra y venta de divisas.
+
+**Funcionalidades principales:**
 - Reconocimiento de comandos de voz.
 - Identificación del tipo de operación: compra o venta.
-- Reconocimiento de montos y monedas mencionadas.
-- Autocompletado de información en el formulario de la operación.
-Tecnologías utilizadas
-- Kotlin
-- Android Studio
-- Jetpack Compose
-- Reconocimiento de voz de Android
-Objetivo
-Facilitar la interacción del usuario con la aplicación mediante la captura de fotografías y el ingreso de información utilizando comandos de vo
+- Interpretación de montos y monedas mencionados.
+- Autocompletado de los campos del formulario.
+
+## 🛠️ Tecnologías utilizadas
+
+| Tecnología | Uso |
+|---|---|
+| Kotlin | Desarrollo de la aplicación |
+| Android Studio | Entorno de desarrollo |
+| Jetpack Compose | Construcción de la interfaz |
+| Reconocimiento de voz de Android | Captura e interpretación de comandos hablados |
+
+## 🎯 Objetivo
+
+Facilitar el uso de la aplicación mediante funciones que permitan capturar fotografías e ingresar información por voz, mejorando la interacción con los formularios de operaciones de divisas.
+
+---
+
+<p align="center">
+  <em>Proyecto académico de Desarrollo de Software</em>
+</p>
+
